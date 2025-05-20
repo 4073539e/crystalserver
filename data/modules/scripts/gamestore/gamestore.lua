@@ -6315,12 +6315,14 @@ GameStore.Categories = {
 		state = GameStore.States.STATE_NONE,
 		offers = {
 			{
-				icons = { "XP_Boost.png" },
+				icons = { "xp_boost.png" },
 				name = "XP Boost",
 				price = 30,
 				id = 65010,
 				description = "<i>Purchase a boost that increases the experience points your character gains from hunting by 50%!</i>\n\n{character}\n{info} lasts for 1 hour hunting time\n{info} paused if stamina falls under 14 hours\n{info} can be purchased up to 5 times between 2 server saves\n{info} price increases with every purchase\n{info} cannot be purchased if an XP boost is already active",
 				type = GameStore.OfferTypes.OFFER_TYPE_EXPBOOST,
+				CoinType = GameStore.CoinType.NonTransferable, -- <<--- IMPORTANTE
+
 			},
 		},
 	},
@@ -6747,7 +6749,45 @@ GameStore.Categories = {
 			},
 		},
 	},
-}
+    -- INICIO: Nuevo bloque para Exclusive VIP
+    {
+        icons = { "Category_PremiumTime.png" }, 
+        name = "Exclusive VIP",
+        rookgaard = true, 
+        state = GameStore.States.STATE_NONE, 
+        subclasses = { "VipTools" },
+    },
+    -- Subcategoría para VipTools
+    {
+        icons = { "Category_UsefulThings.png" }, 
+        name = "VipTools",
+        parent = "Exclusive VIP",
+        rookgaard = true,
+        state = GameStore.States.STATE_NONE,
+        offers = {
+            {
+                icons = { "Bookworm_Doll.png" }, 
+                name = "Boss Teleports", 
+                price = 2125, 
+                itemtype = 18343, 
+                count = 1,
+                description = "<i>A magical doll that grants VIPs the ability to teleport directly to challenging boss lairs. This item has a 25-minute cooldown.</i>\n\n{character}\n{storeinbox}",
+                type = GameStore.OfferTypes.OFFER_TYPE_ITEM_UNIQUE, 
+            },
+            {
+                icons = { "Supreme_Cube.png" }, 
+                name = "City Teleports", 
+                price = 1500, 
+                itemtype = 31633, 
+                count = 1,
+                description = "<i>A powerful cube that allows VIPs to instantly teleport to major cities. This item has a 15-minute cooldown.</i>\n\n{character}\n{storeinbox}",
+                type = GameStore.OfferTypes.OFFER_TYPE_ITEM_UNIQUE, 
+            },
+        },
+    } -- << IMPORTANTE: NO pongas coma aquí si este es el ÚLTIMO bloque de categorías
+    -- FIN: Nuevo bloque para Exclusive VIP
+} -- Cierre de GameStore.Categories
+
 
 -- Each outfit must be uniquely identified to distinguish between addons.
 -- Here we dynamically assign ids for outfits. These ids must be unique.
@@ -6766,12 +6806,20 @@ for k, category in ipairs(GameStore.Categories) do
 					runningId = runningId + 1
 				end
 			end
-			if not offer.type then
-				offer.type = GameStore.OfferTypes.OFFER_TYPE_NONE
-			end
-			if not offer.coinType then
-				offer.coinType = GameStore.CoinType.Transferable
-			end
+		--	if not offer.type then
+		--		offer.type = GameStore.OfferTypes.OFFER_TYPE_NONE
+		--	end
+		--	if not offer.coinType then
+		--	offer.coinType = GameStore.CoinType.Transferable
+		--	end
+		--	if not offer.coinType then
+		--	offer.coinType = GameStore.CoinType.Coin
+		--	end
 		end
 	end
 end
+			-- Ejemplo: Para permitir ambos tipos de moneda (transferibles y no transferibles) para ofertas específicas,
+			-- descomenta y modifica la siguiente sección:
+			-- if offer.name == "Nombre de la oferta que acepta ambos" then
+			--	 offer.coinType = {GameStore.CoinType.Transferable, GameStore.CoinType.NonTransferable}
+			-- end
